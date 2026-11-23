@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid'; // Import uuid
 import {
@@ -23,17 +23,35 @@ const nodeTypes = { tableNode: TableNode };
 // --- Landing Page Component ---
 function LandingPage() {
   return (
-    <div>
-      <h1>Welcome to the MySQL Visual UI</h1>
-      <p>Select an option:</p>
-      <nav>
-        <ul>
-          <li><Link to="/canvas">Schema Design Canvas</Link></li>
-          <li><Link to="/select">Data Selection</Link></li>
-          <li><Link to="/crud">CRUD Operations</Link></li>
-          <li><Link to="/normalization">Normalization</Link></li>
-        </ul>
-      </nav>
+    <div style={{ maxWidth: '960px', margin: '2rem auto', textAlign: 'center' }}>
+      <h1 style={{ fontSize: '2.4rem', marginBottom: '0.75rem', color: '#0f172a', fontWeight: '800' }}>
+        MySQL Visual UI
+      </h1>
+      <p style={{ color: '#64748b', fontSize: '1.15rem', maxWidth: '650px', margin: '0 auto 2.5rem auto' }}>
+        A visual workbench for schema design, visual SQL query construction, dynamic CRUD operations, and relational normalization analysis.
+      </p>
+      <div className="landing-grid">
+        <Link to="/canvas" className="landing-card">
+          <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🎨</div>
+          <h3>Schema Design Canvas</h3>
+          <p>Visually create tables, define attributes with constraints (PK, NN, UQ), and connect foreign keys on an interactive canvas.</p>
+        </Link>
+        <Link to="/select" className="landing-card">
+          <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🔍</div>
+          <h3>Data Selection</h3>
+          <p>Build dynamic SQL SELECT queries visually with multi-table JOINs, aggregate functions, WHERE filters, and GROUP BY.</p>
+        </Link>
+        <Link to="/crud" className="landing-card">
+          <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>⚡</div>
+          <h3>CRUD Operations</h3>
+          <p>Insert new rows with batch support, update existing data with custom conditions, and safely delete records.</p>
+        </Link>
+        <Link to="/normalization" className="landing-card">
+          <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>📐</div>
+          <h3>Normalization Analysis</h3>
+          <p>Analyze attribute closures, calculate minimal candidate keys, and check 1NF, 2NF, 3NF, and BCNF compliance.</p>
+        </Link>
+      </div>
     </div>
   );
 }
@@ -174,8 +192,8 @@ function SchemaCanvas() {
           )}
         </div>
         <div style={{ flexShrink: 0, marginBottom: '10px' }}>
-           <button onClick={addNode} style={{ marginRight: '5px' }}>Add New Table Node</button>
-           <button onClick={sendSchema}>Apply Schema Changes to DB</button>
+           <button onClick={addNode} className="btn-primary" style={{ marginRight: '8px', padding: '8px 16px' }}>+ Add New Table Node</button>
+           <button onClick={sendSchema} className="btn-success" style={{ padding: '8px 16px' }}>Apply Schema Changes to DB</button>
         </div>
         <div style={{ flexShrink: 0, borderTop: '1px solid #eee', paddingTop: '10px' }}>
           <h4>Existing Tables (Click to Add to Canvas):</h4>
@@ -1687,23 +1705,29 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <nav>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/canvas">Canvas</Link></li>
-            <li><Link to="/select">Select</Link></li>
-            <li><Link to="/crud">CRUD</Link></li>
-            <li><Link to="/normalization">Normalization</Link></li>
-          </ul>
-        </nav>
-        <hr />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/canvas" element={<SchemaCanvas />} />
-          <Route path="/select" element={<DataSelection />} />
-          <Route path="/crud" element={<CrudOperations />} />
-          <Route path="/normalization" element={<NormalizationAnalyzer   />} />
-        </Routes>
+        <header className="app-header">
+          <Link to="/" className="app-brand">
+            <span>🗄️</span> MySQL Visual UI
+          </Link>
+          <nav>
+            <ul className="nav-links">
+              <li><NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Home</NavLink></li>
+              <li><NavLink to="/canvas" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Canvas</NavLink></li>
+              <li><NavLink to="/select" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Select</NavLink></li>
+              <li><NavLink to="/crud" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>CRUD</NavLink></li>
+              <li><NavLink to="/normalization" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Normalization</NavLink></li>
+            </ul>
+          </nav>
+        </header>
+        <div className="page-container">
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/canvas" element={<SchemaCanvas />} />
+            <Route path="/select" element={<DataSelection />} />
+            <Route path="/crud" element={<CrudOperations />} />
+            <Route path="/normalization" element={<NormalizationAnalyzer   />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

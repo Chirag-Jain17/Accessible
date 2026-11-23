@@ -3,16 +3,22 @@ import { Handle, Position, useReactFlow } from '@xyflow/react';
 
 // Basic styling (can be moved to CSS)
 const nodeStyle = {
-  border: '1px solid #777',
-  padding: '10px',
-  borderRadius: '5px',
-  background: 'white',
-  minWidth: '200px',
+  border: '1px solid #cbd5e1',
+  padding: '12px',
+  borderRadius: '8px',
+  background: '#ffffff',
+  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.08)',
+  minWidth: '220px',
 };
 
 const inputStyle = {
-  width: '95%',
-  marginBottom: '5px',
+  width: '100%',
+  fontWeight: '600',
+  fontSize: '0.95rem',
+  marginBottom: '6px',
+  border: '1px solid #cbd5e1',
+  borderRadius: '4px',
+  padding: '4px 8px',
 };
 
 const attributeRowStyle = {
