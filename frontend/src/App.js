@@ -1157,16 +1157,27 @@ function CrudOperations() {
                                           {col.isPK && <span style={{ color: 'purple', fontWeight:'bold' }}> (PK)</span>}
                                           {col.isNotNull && !col.isPK && <span style={{ color: 'red' }}> *</span>} {/* Indicate required */}
                                       </label>
-                                      <input
-                                          type={col.type.includes('INT') ? 'number' : col.type.includes('DATE') ? 'date' : 'text'}
-                                          name={col.name}
-                                          value={row[col.name] || ''}
-                                          onChange={(e) => handleInputChange(rowIndex, col.name, e.target.value)}
-                                          style={{ width: '95%', padding: '4px' }}
-                                          placeholder={`${col.name} value`}
-                                          // Disable PK input if it's typically auto-generated? Needs more schema info.
-                                          // disabled={col.isPK /* && isAutoIncrement? */}
-                                      />
+                                      {col.type === 'BOOLEAN' ? (
+                                          <select
+                                              name={col.name}
+                                              value={row[col.name] !== undefined ? row[col.name] : ''}
+                                              onChange={(e) => handleInputChange(rowIndex, col.name, e.target.value)}
+                                              style={{ width: '95%', padding: '4px' }}
+                                          >
+                                              <option value="">-- Select Boolean (True/False) --</option>
+                                              <option value="1">TRUE (1)</option>
+                                              <option value="0">FALSE (0)</option>
+                                          </select>
+                                      ) : (
+                                          <input
+                                              type={col.type.includes('INT') ? 'number' : col.type.includes('DATE') ? 'date' : 'text'}
+                                              name={col.name}
+                                              value={row[col.name] || ''}
+                                              onChange={(e) => handleInputChange(rowIndex, col.name, e.target.value)}
+                                              style={{ width: '95%', padding: '4px' }}
+                                              placeholder={`${col.name} value`}
+                                          />
+                                      )}
                                   </div>
                               ))}
                           </div>
@@ -1234,14 +1245,27 @@ function CrudOperations() {
                                 <label style={{ display: 'block', marginBottom: '3px', fontSize: '0.9em' }}>
                                     {col.name} <span style={{ color: '#777' }}>({col.type})</span> {col.isPK && <span style={{ color: 'purple', fontWeight:'bold' }}> (PK - Caution!)</span>}
                                 </label>
-                                <input
-                                    type={col.type.includes('INT') ? 'number' : col.type.includes('DATE') ? 'date' : 'text'}
-                                    name={col.name}
-                                    value={firstRowForUpdate[col.name] || ''} // Value from first row state
-                                    onChange={(e) => handleInputChange(0, col.name, e.target.value)} // Update first row state
-                                    style={{ width: '95%', padding: '4px' }}
-                                    placeholder={`New value for ${col.name} (leave blank to ignore)`}
-                                />
+                                {col.type === 'BOOLEAN' ? (
+                                    <select
+                                        name={col.name}
+                                        value={firstRowForUpdate[col.name] !== undefined ? firstRowForUpdate[col.name] : ''}
+                                        onChange={(e) => handleInputChange(0, col.name, e.target.value)}
+                                        style={{ width: '95%', padding: '4px' }}
+                                    >
+                                        <option value="">-- Leave Unchanged --</option>
+                                        <option value="1">TRUE (1)</option>
+                                        <option value="0">FALSE (0)</option>
+                                    </select>
+                                ) : (
+                                    <input
+                                        type={col.type.includes('INT') ? 'number' : col.type.includes('DATE') ? 'date' : 'text'}
+                                        name={col.name}
+                                        value={firstRowForUpdate[col.name] || ''} // Value from first row state
+                                        onChange={(e) => handleInputChange(0, col.name, e.target.value)} // Update first row state
+                                        style={{ width: '95%', padding: '4px' }}
+                                        placeholder={`New value for ${col.name} (leave blank to ignore)`}
+                                    />
+                                )}
                             </div>
                         ))}
                     </div>

@@ -1,8 +1,13 @@
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+# Explicitly load .env from backend directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(current_dir, '.env')
+if os.path.exists(env_path):
+    load_dotenv(dotenv_path=env_path)
+else:
+    load_dotenv()
 
 # Database Connection Settings
 DB_HOST = os.getenv('MYSQL_HOST', 'localhost')

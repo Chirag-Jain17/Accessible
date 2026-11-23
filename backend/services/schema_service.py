@@ -45,14 +45,14 @@ def fetch_table_details(table_name):
             col_type = col_type_raw
             if 'VARCHAR' in col_type_raw:
                 col_type = 'VARCHAR(255)'
+            elif 'TINYINT' in col_type_raw or 'BOOL' in col_type_raw:
+                col_type = 'BOOLEAN'
             elif 'INT' in col_type_raw:
                 col_type = 'INT'
             elif 'TEXT' in col_type_raw:
                 col_type = 'TEXT'
             elif 'DATE' in col_type_raw:
                 col_type = 'DATE'
-            elif 'BOOL' in col_type_raw:
-                col_type = 'BOOLEAN'
             elif 'DECIMAL' in col_type_raw:
                 col_type = 'DECIMAL(10,2)'
             attributes.append({
@@ -115,14 +115,14 @@ def fetch_current_schema():
                 col_type = col_type_raw
                 if 'VARCHAR' in col_type_raw:
                     col_type = 'VARCHAR(255)'
+                elif 'TINYINT' in col_type_raw or 'BOOL' in col_type_raw:
+                    col_type = 'BOOLEAN'
                 elif 'INT' in col_type_raw:
                     col_type = 'INT'
                 elif 'TEXT' in col_type_raw:
                     col_type = 'TEXT'
                 elif 'DATE' in col_type_raw:
                     col_type = 'DATE'
-                elif 'BOOL' in col_type_raw:
-                    col_type = 'BOOLEAN'
                 elif 'DECIMAL' in col_type_raw:
                     col_type = 'DECIMAL(10,2)'
                 attributes.append({
