@@ -1,224 +1,196 @@
-# Accessible - MySQL Visual Web UI
+# Accessible — MySQL Visual Web Studio
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Python Version](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/)
-[![React Version](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
-[![Flask Version](https://img.shields.io/badge/Flask-2.x-orange.svg)](https://flask.palletsprojects.com/)
-
-**Accessible** is a local web application designed for developers to interact with MySQL databases through an intuitive visual interface. It allows for schema design, data querying with joins and conditions, CRUD operations, and schema normalization analysis without needing to write raw SQL.
+**Accessible** is an interactive, full-stack visual workspace designed to simplify MySQL database management. It enables developers and students to visually design schemas, build complex SQL queries with joins and aggregates, perform live CRUD operations, and verify database normalization (1NF through BCNF) without writing raw SQL queries manually.
 
 ---
 
-## 📖 Table of Contents
+## 🌟 Key Features
 
-* [📍 About The Project](#-about-the-project)
-* [✨ Features](#-features)
-* [🖼️ Screenshots (Placeholder)](#️-screenshots-placeholder)
-* [🛠️ Built With](#️-built-with)
-* [🚀 Getting Started](#-getting-started)
-    * [Prerequisites](#prerequisites)
-    * [Installation](#installation)
-        * [Windows (using run.bat)](#windows-using-runbat)
-        * [macOS / Linux (Manual Setup)](#macos--linux-manual-setup)
-* [⚙️ Configuration](#️-configuration)
-* [▶️ Usage](#️-usage)
-    * [Windows (using run.bat)](#windows-using-runbat-1)
-    * [macOS / Linux (Manual Start)](#macos--linux-manual-start)
-* [🤝 Contributing](#-contributing)
-* [📜 License](#-license)
+- **Visual Schema Design Canvas**:
+  - Interactive drag-and-drop table nodes powered by `@xyflow/react`.
+  - Define columns, data types (`INT`, `VARCHAR`, `TEXT`, `DATE`, `BOOLEAN`, `DECIMAL`), and constraints (`Primary Key`, `Not Null`, `Unique`).
+  - Visually connect foreign key relationships between tables.
+  - Automatically syncs and applies schema changes directly into MySQL.
 
----
+- **Visual Query Builder (Data Selection)**:
+  - Construct dynamic multi-table `SELECT` queries through an intuitive interface.
+  - Define `INNER JOIN`, `LEFT JOIN`, and `RIGHT JOIN` conditions visually.
+  - Apply filter conditions (`WHERE`) with custom comparison operators and `AND`/`OR` logic.
+  - Compute aggregate values (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`) with custom aliases and `GROUP BY` grouping.
 
-## 📍 About The Project
+- **Interactive CRUD Operations**:
+  - **Insert**: Insert single or batch multi-row records with dynamic column inputs.
+  - **Update**: Modify existing database records using custom `SET` attributes and targeted `WHERE` criteria.
+  - **Delete**: Safely remove records matching specific conditional filters.
+  - **Data Viewer**: Inspect live table contents directly inside the interface.
 
-This tool aims to simplify common database tasks for developers working with MySQL. By providing a visual layer over standard SQL operations, it speeds up development workflows related to schema management, data inspection/manipulation, and understanding database structure.
+- **Relational Normalization Analyzer**:
+  - Computes attribute closures ($X^+$) and calculates minimal candidate keys.
+  - Evaluates schema compliance against **1NF**, **2NF** (partial dependencies), **3NF** (transitive dependencies), and **BCNF** (superkey determinants).
+  - Outlines exact dependency violations with diagnostic guidance.
 
-**Key goals include:**
-* Visual schema design and modification.
-* Intuitive data selection and filtering.
-* Simplified CRUD operations.
-* Tools for analyzing and improving schema normalization.
-
----
-
-## ✨ Features
-
-* **Visual Schema Designer:** Drag-and-drop interface (`@xyflow/react`) to create/modify tables, define columns (name, type, PK, constraints), and visualize relationships. Changes can be applied directly to the database.
-* **Data Query Builder:** Select tables and columns, define JOIN conditions, and apply WHERE clauses through a UI to fetch and display data.
-* **CRUD Operations Interface:** View table data and perform Insert, Update, and Delete operations via forms, with support for WHERE conditions on updates/deletes.
-* **Normalization Analyzer:** Analyze table schemas against 1NF, 2NF, 3NF, and BCNF based on Primary Keys and user-defined Functional Dependencies.
-* **Schema Decomposition:** Calculate and apply 3NF or BCNF decompositions based on analysis results (includes data migration and dropping the original table).
+- **Refined User Experience**:
+  - Responsive landing page dashboard with quick-access feature cards.
+  - Sticky navigation header with active route tracking across tools.
 
 ---
 
-## 🖼️ Screenshots (Placeholder)
+## 🛠️ Tech Stack
 
-<p align="center">
-  *Add screenshots of the main features (Canvas, Select, CRUD, Normalization) here.*
-</p>
+- **Frontend**: React 18, React Router, `@xyflow/react` (React Flow), Axios, Modern CSS
+- **Backend**: Python 3.8+, Flask (modular Blueprints), `mysql-connector-python`, `flask-cors`, `python-dotenv`
+- **Database**: MySQL Server 8.0+
 
 ---
 
-## 🛠️ Built With
+## 📁 Repository Structure
 
-This project utilizes the following major technologies:
-
-* **Backend:**
-    * ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
-    * ![Flask](https://img.shields.io/badge/Flask-000000?style=flat&logo=flask&logoColor=white)
-    * `mysql-connector-python`
-    * `python-dotenv`
-* **Frontend:**
-    * ![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
-    * `react-router-dom`
-    * `axios`
-    * `@xyflow/react` (React Flow)
-    * CSS
-* **Database:**
-    * ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
+```
+DBMS-Project/
+├── backend/
+│   ├── config.py                 # Configuration and environment variables
+│   ├── database.py               # Database connection helper
+│   ├── utils/                    # Helper utilities
+│   │   ├── sanitizer.py          # SQL identifier sanitization
+│   │   └── query_builder.py      # Dynamic WHERE clause builder
+│   ├── services/                 # Business logic and database operations
+│   │   ├── schema_service.py     # Schema sync and table inspection
+│   │   ├── query_service.py      # SELECT query building & execution
+│   │   ├── dml_service.py        # INSERT, UPDATE, DELETE execution
+│   │   └── normalization_service.py # Closure, candidate keys, normalization
+│   ├── routes/                   # API Blueprint route endpoints (/api)
+│   │   ├── general_routes.py     # Ping & DB connection test
+│   │   ├── schema_routes.py      # Canvas schema and table metadata
+│   │   ├── query_routes.py       # Query execution
+│   │   ├── dml_routes.py         # CRUD operations
+│   │   └── normalization_routes.py # Normalization analysis
+│   ├── app.py                    # Flask application factory and entry point
+│   ├── requirements.txt          # Python dependencies
+│   ├── .env.example              # Sample environment template
+│   └── README.md                 # Backend documentation
+├── frontend/
+│   ├── public/                   # HTML template and static assets
+│   ├── src/
+│   │   ├── App.js                # Core UI router, pages, and layout
+│   │   ├── App.css               # Global application styling and header
+│   │   ├── TableNode.js          # Custom React Flow table node component
+│   │   └── index.js              # React DOM initialization
+│   └── package.json              # Node dependencies and scripts
+├── .gitignore                    # Git exclusion rules
+└── README.md                     # Main project documentation
+```
 
 ---
 
 ## 🚀 Getting Started
 
-Follow these steps to get a local copy up and running.
+Follow these steps to set up and run the application locally.
 
-### Prerequisites
+### 1. Prerequisites
 
-Ensure you have the following installed and configured in your system's PATH:
-
-* **Python:** Version 3.7+ recommended (`pip` included).
-* **Node.js & npm:** Node.js version 14+ recommended (`npm` included).
-* **MySQL Server:** A running MySQL instance (local or remote).
-* **Git:** For cloning the repository.
-
-### Installation
-
-#### Windows (using `run.bat`)
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/Viv921/Accessible
-    cd Accessible
-    ```
-
-2.  **Configure Database:**
-    * Create the database connection file by following the steps in the [⚙️ Configuration](#️-configuration) section below. **This is essential.**
-
-3.  **Run the Installer/Launcher:**
-    * Double-click the `run.bat` file located in the project's root directory.
-    * The script will automatically perform setup checks and install dependencies if needed before launching the servers.
-
-#### macOS / Linux (Manual Setup)
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/Viv921/Accessible
-    cd Accessible
-    ```
-
-2.  **Backend Setup:**
-    * Navigate to the backend directory: `cd backend`
-    * Create and activate a virtual environment:
-        ```bash
-        python3 -m venv venv  # Or python -m venv venv
-        source venv/bin/activate
-        ```
-    * Install Python dependencies:
-        ```bash
-        pip install -r requirements.txt
-        ```
-    * Configure database connection (see [⚙️ Configuration](#️-configuration) below). **This is essential.**
-    * Deactivate the virtual environment for now: `deactivate`
-    * Navigate back to the root directory: `cd ..`
-
-3.  **Frontend Setup:**
-    * Navigate to the frontend directory: `cd frontend`
-    * Install Node.js dependencies:
-        ```bash
-        npm install
-        ```
-    * Navigate back to the root directory: `cd ..`
-
-4.  **Database Setup:**
-    * Ensure your MySQL server is running.
-    * Create the database specified in your `.env` file (see [⚙️ Configuration](#️-configuration) below) if it doesn't exist.
-        ```sql
-        -- Example using MySQL client:
-        CREATE DATABASE mydatabase; -- Or your chosen DB_NAME
-        ```
+Ensure the following tools are installed on your system:
+- **Python** (version 3.8 or higher)
+- **Node.js** (version 18 or higher) & **npm**
+- **MySQL Server** (version 8.0 or higher) running locally on port `3306`
+- **Git**
 
 ---
 
-## ⚙️ Configuration
+### 2. Database Setup
 
-The backend requires a `.env` file in the `backend` directory to configure the database connection. This step is required for **all operating systems**.
+1. Start your MySQL service:
+   - On Windows: Run `net start MySQL80` or use Windows Services (`services.msc`).
+   - On macOS / Linux: `sudo systemctl start mysql` or `brew services start mysql`.
 
-1.  Navigate to the `backend` directory.
-2.  Create a file named `.env`.
-3.  Add the following environment variables, replacing the placeholder values with your actual MySQL credentials:
-
-    ```dotenv
-    # .env file in the backend directory
-    MYSQL_HOST=localhost
-    MYSQL_USER=your_mysql_user
-    MYSQL_PASSWORD=your_mysql_password
-    MYSQL_DB=your_database_name
-    ```
-
-    * `MYSQL_HOST`: Hostname or IP address of your MySQL server.
-    * `MYSQL_USER`: MySQL username.
-    * `MYSQL_PASSWORD`: Password for the MySQL user.
-    * `MYSQL_DB`: The name of the database to connect to.
+2. Log into MySQL and create the database:
+   ```sql
+   CREATE DATABASE IF NOT EXISTS mydatabase;
+   ```
 
 ---
 
-## ▶️ Usage
+### 3. Backend Setup & Run
 
-#### Windows (using `run.bat`)
+Open a terminal window and follow these steps:
 
-1.  **Ensure Configuration is Done:** Make sure you have created the `backend/.env` file.
-2.  **Run the Script:** Double-click the `run.bat` file in the project root directory.
-3.  **Wait:** The script launches two new command prompt windows (backend and frontend).
-4.  **Access:** The application should open automatically in your browser at `http://localhost:3000`.
-5.  **Stop:** Close **both** command prompt windows opened by the script.
+1. **Navigate to the backend directory:**
+   ```bash
+   cd backend
+   ```
 
-#### macOS / Linux (Manual Start)
+2. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-1.  **Start Backend:**
-    * Open Terminal 1.
-    * `cd <repository-directory>`
-    * `source backend/venv/bin/activate`
-    * `cd backend`
-    * `flask run` (or `python app.py`)
-    * Keep this terminal open.
+3. **Configure environment variables:**
+   Create a `.env` file from `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+   *(On Windows Command Prompt: `copy .env.example .env`)*
 
-2.  **Start Frontend:**
-    * Open Terminal 2.
-    * `cd <repository-directory>`
-    * `cd frontend`
-    * `npm start`
-    * Keep this terminal open.
+   Edit `.env` to match your local MySQL configuration:
+   ```ini
+   MYSQL_HOST=localhost
+   MYSQL_USER=root
+   MYSQL_PASSWORD=your_mysql_password
+   MYSQL_DB=mydatabase
 
-3.  **Access:** Open `http://localhost:3000` in your browser.
+   HOST=0.0.0.0
+   PORT=5000
+   DEBUG=True
+   ```
 
-4.  **Stop:** Press `Ctrl + C` in both terminals. Deactivate the backend venv in Terminal 1 (`deactivate`).
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+4. **Start the backend server:**
+   ```bash
+   python app.py
+   ```
+   The Flask server will start listening at `http://127.0.0.1:5000`.
 
 ---
 
-## 📜 License
+### 4. Frontend Setup & Run
 
-Distributed under the MIT License. See `LICENSE` file for more information.
+Open a **second** terminal window:
 
+1. **Navigate to the frontend directory:**
+   ```bash
+   cd frontend
+   ```
+
+2. **Install Node dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the React development server:**
+   ```bash
+   npm start
+   ```
+
+Your web browser will automatically open **`http://localhost:3000`**.
+
+---
+
+## 🌐 Application Navigation
+
+| Tab | URL | Purpose |
+| :--- | :--- | :--- |
+| **Home** | `/` | Overview dashboard with direct links to tools |
+| **Canvas** | `/canvas` | Interactive schema design canvas and live DB sync |
+| **Data Selection** | `/select` | Visual query builder with joins, filters, and aggregates |
+| **CRUD** | `/crud` | Record insertion, conditional updates, and deletions |
+| **Normalization** | `/normalization` | Functional dependency analyzer (1NF, 2NF, 3NF, BCNF) |
+
+---
+
+## 🔒 Security Note
+
+Sensitive configuration parameters (such as database passwords) must be stored inside `backend/.env`. The `.gitignore` file is configured to ensure `.env` and local temporary build files are never committed to version control.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
